@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { op } from 'sequelize';
 
 import db from '../models';
 function hashPassword(password) {
@@ -18,6 +19,7 @@ const checkEmail = (email) => {
                 resolve(user);
             }
         } catch (e) {
+            console.log(e);
             reject(e);
         }
     });
@@ -61,7 +63,19 @@ export const handleLogin = (email, password) => {
 export const handleGetUser = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            const user = await db.User.findAll({ attributes: { exclude: ['password'] }, limit: 10 });
+            const user = await db.User.findAll({
+                attributes: { exclude: ['password'] },
+                include: [
+                    {
+                        model: db.Manager,
+                        as: 'roleData',
+                        attributes: ['roleId'],
+                        where: { roleId: ['R1', 'R2'] },
+                    },
+                ],
+                raw: true,
+                nest: true,
+            });
             resolve(user);
         } catch (e) {
             reject(e);
@@ -72,9 +86,13 @@ export const handleCreateUser = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
             const passwordHash = hashPassword(data.password);
-            await db.User.create({
+            const user = await db.User.create({
                 ...data,
                 password: passwordHash,
+            });
+            await db.Manager.create({
+                userId: user.dataValues.id,
+                roleId: 'R3',
             });
             resolve();
         } catch (err) {
@@ -87,6 +105,9 @@ export const handleUpdateUser = (data) => {
         try {
             await db.User.update(data, {
                 where: { id: data.id },
+            });
+            await db.Manager.update(data, {
+                where: { userId: data.id },
             });
             resolve();
         } catch (err) {

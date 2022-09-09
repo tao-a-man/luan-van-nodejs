@@ -6,15 +6,21 @@ module.exports = (sequelize, DataTypes) => {
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
          * The `models/index` file will call this method automatically.
+         *
          */
-        static associate(models) {}
+        static associate(models) {
+            User.belongsTo(models.Manager, { foreignKey: 'id', targetKey: 'userId', as: 'roleData' });
+        }
     }
     User.init(
         {
             email: DataTypes.STRING,
             password: DataTypes.STRING,
-            fullName: DataTypes.STRING,
+            firstName: DataTypes.STRING,
+            lastName: DataTypes.STRING,
+            firstName: DataTypes.STRING,
             age: DataTypes.INTEGER,
+            gender: DataTypes.STRING,
         },
         {
             sequelize,
