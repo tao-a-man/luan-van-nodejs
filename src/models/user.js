@@ -9,7 +9,11 @@ module.exports = (sequelize, DataTypes) => {
          *
          */
         static associate(models) {
-            User.belongsTo(models.Manager, { foreignKey: 'id', targetKey: 'userId', as: 'roleData' });
+            User.belongsTo(models.Manager, {
+                foreignKey: 'id',
+                targetKey: 'userId',
+                as: 'roleData',
+            });
         }
     }
     User.init(

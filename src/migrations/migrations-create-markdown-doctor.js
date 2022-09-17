@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable('MarkdownDoctor', {
+        await queryInterface.createTable('MarkdownDoctors', {
             id: {
                 allowNull: false,
                 autoIncrement: true,
@@ -10,6 +10,11 @@ module.exports = {
             },
             doctorId: {
                 type: Sequelize.INTEGER,
+                references: {
+                    model: 'Managers', // name of Target model
+                    key: 'userId', // key in Target model that we're referencing
+                },
+                onDelete: 'CASCADE',
             },
             contentHTML: {
                 type: Sequelize.TEXT,
@@ -31,6 +36,6 @@ module.exports = {
         });
     },
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.dropTable('MarkdownDoctor');
+        await queryInterface.dropTable('MarkdownDoctors');
     },
 };

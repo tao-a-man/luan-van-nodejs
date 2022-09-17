@@ -18,10 +18,12 @@ const userController = (function home() {
                         res.status(200).json({
                             errCode: userChecked.errCode,
                             errMessage: userChecked.errMessage,
-                            token: userChecked.token,
+                            token: userChecked.token ? userChecked.token : null,
+                            roleId: userChecked.user ? userChecked.user.roleData.roleId : null,
                         });
                     })
                     .catch((err) => {
+                        console.log(err);
                         res.status(500).json({ errCode: err.errCode, errMessage: err.errMessage });
                     });
             }

@@ -1,6 +1,5 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { op } from 'sequelize';
 
 import db from '../models';
 function hashPassword(password) {
@@ -12,12 +11,19 @@ function hashPassword(password) {
 const checkEmail = (email) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const user = await db.User.findOne({ where: { email: email }, raw: true });
-            if (user) {
-                resolve(user);
-            } else {
-                resolve(user);
-            }
+            const user = await db.User.findOne({
+                where: { email: email },
+                include: [
+                    {
+                        model: db.Manager,
+                        as: 'roleData',
+                        attributes: ['roleId'],
+                    },
+                ],
+                raw: true,
+                nest: true,
+            });
+            resolve(user);
         } catch (e) {
             console.log(e);
             reject(e);
@@ -70,7 +76,7 @@ export const handleGetUser = () => {
                         model: db.Manager,
                         as: 'roleData',
                         attributes: ['roleId'],
-                        where: { roleId: ['R1', 'R2'] },
+                        where: { roleId: ['R2'] },
                     },
                 ],
                 raw: true,
@@ -90,10 +96,12 @@ export const handleCreateUser = (data) => {
                 ...data,
                 password: passwordHash,
             });
-            await db.Manager.create({
-                userId: user.dataValues.id,
-                roleId: 'R3',
-            });
+            if (data.roleId) {
+                await db.Manager.create({
+                    userId: user.dataValues.id,
+                    roleId: 'R2',
+                });
+            }
             resolve();
         } catch (err) {
             reject(err);

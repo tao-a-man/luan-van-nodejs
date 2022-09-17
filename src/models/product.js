@@ -7,21 +7,7 @@ module.exports = (sequelize, DataTypes) => {
          * This method is not a part of Sequelize lifecycle.
          * The `models/index` file will call this method automatically.
          *
-         * name: {
-                type: Sequelize.STRING,
-            },
-            commodities: {
-                type: Sequelize.STRING,
-            },
-            price: {
-                type: Sequelize.INTEGER,
-            },
-            amount: {
-                type: Sequelize.INTEGER,
-            },
-            image: {
-                type: Sequelize.BLOB('long'),
-            },
+         * =]
          */
         static associate(models) {}
     }
