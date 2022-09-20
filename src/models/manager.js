@@ -8,12 +8,13 @@ module.exports = (sequelize, DataTypes) => {
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
-            Manager.hasOne(models.User, {
-                foreignKey: 'id',
-                as: 'roleData',
-            });
-            Manager.hasOne(models.PhoneNumber, {
+            Manager.belongsTo(models.User, {
                 foreignKey: 'userId',
+                as: 'userData',
+            });
+            Manager.belongsTo(models.PhoneNumber, {
+                foreignKey: 'userId',
+                targetKey: 'userId',
                 as: 'phone',
             });
             Manager.belongsTo(models.MarkdownDoctor, {

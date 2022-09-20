@@ -54,6 +54,8 @@ export const handleUpdateDetailDoctor = (user) => {
                 where: { doctorId: +user.userId },
                 defaults: {
                     contentHTML: user.contentHTML,
+                    contentMarkdown: user.contentMarkdown,
+                    description: user.description,
                 },
             });
             if (markDown && !markDownCreated) {
@@ -73,6 +75,26 @@ export const handleUpdateDetailDoctor = (user) => {
                 }
             }
             resolve(result);
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+export const handleGetDoctorBySpecialist = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const infoDoctor = await db.User.findAll({
+                include: [
+                    {
+                        model: db.Manager,
+                        where: { specialistId: id },
+                        as: 'managerData',
+                    },
+                ],
+                raw: true,
+                nest: true,
+            });
+            resolve(infoDoctor);
         } catch (e) {
             reject(e);
         }

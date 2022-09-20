@@ -16,7 +16,7 @@ const checkEmail = (email) => {
                 include: [
                     {
                         model: db.Manager,
-                        as: 'roleData',
+                        as: 'managerData',
                         attributes: ['roleId'],
                     },
                 ],
@@ -74,7 +74,7 @@ export const handleGetUser = () => {
                 include: [
                     {
                         model: db.Manager,
-                        as: 'roleData',
+                        as: 'managerData',
                         attributes: ['roleId'],
                         where: { roleId: ['R2'] },
                     },

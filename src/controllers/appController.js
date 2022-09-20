@@ -3,6 +3,7 @@ import {
     handleGetCommodities,
     handleUpdateDetailDoctor,
     handleGetInfoDetailDoctor,
+    handleGetDoctorBySpecialist,
 } from '../services/appServices';
 const appController = (function home() {
     return {
@@ -61,6 +62,24 @@ const appController = (function home() {
         getInfoDetailDoctor(req, res) {
             const id = req.query.id;
             handleGetInfoDetailDoctor(id)
+                .then((respon) => {
+                    return res.status(200).json({
+                        errCode: 0,
+                        errMessage: 'Get Doctor Success',
+                        infoDetailDoctor: respon,
+                    });
+                })
+                .catch((err) => {
+                    console.log(err);
+                    return res.status(200).json({
+                        errCode: 1,
+                        errMessage: err,
+                    });
+                });
+        },
+        getDoctorBySpecialist(req, res) {
+            const id = req.query.id;
+            handleGetDoctorBySpecialist(id)
                 .then((respon) => {
                     return res.status(200).json({
                         errCode: 0,

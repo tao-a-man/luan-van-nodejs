@@ -19,7 +19,7 @@ const userController = (function home() {
                             errCode: userChecked.errCode,
                             errMessage: userChecked.errMessage,
                             token: userChecked.token ? userChecked.token : null,
-                            roleId: userChecked.user ? userChecked.user.roleData.roleId : null,
+                            roleId: userChecked.user ? userChecked.user.managerData.roleId : null,
                         });
                     })
                     .catch((err) => {

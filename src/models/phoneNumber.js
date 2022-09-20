@@ -8,7 +8,9 @@ module.exports = (sequelize, DataTypes) => {
          * The `models/index` file will call this method automatically.
          *
          */
-        static associate(models) {}
+        static associate(models) {
+            PhoneNumber.hasOne(models.Manager, { foreignKey: 'userId', as: 'phone' });
+        }
     }
     PhoneNumber.init(
         {

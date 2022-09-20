@@ -18,6 +18,8 @@ function initWebRoutes(app) {
     router.get('/api/get-commodities', appController.getCommodities);
     router.get('/api/get-info-detail-doctor', appController.getInfoDetailDoctor);
     router.put('/api/update-detail-doctor', appController.updateDetailDoctor);
+    router.get('/api/get-doctor-by-specialist', appController.getDoctorBySpecialist);
+
     return app.use('/', router);
 }
 

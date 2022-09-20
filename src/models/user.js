@@ -9,10 +9,9 @@ module.exports = (sequelize, DataTypes) => {
          *
          */
         static associate(models) {
-            User.belongsTo(models.Manager, {
-                foreignKey: 'id',
-                targetKey: 'userId',
-                as: 'roleData',
+            User.hasOne(models.Manager, {
+                foreignKey: 'userId',
+                as: 'managerData',
             });
         }
     }
@@ -22,7 +21,6 @@ module.exports = (sequelize, DataTypes) => {
             password: DataTypes.STRING,
             firstName: DataTypes.STRING,
             lastName: DataTypes.STRING,
-            firstName: DataTypes.STRING,
             age: DataTypes.INTEGER,
             gender: DataTypes.STRING,
         },
