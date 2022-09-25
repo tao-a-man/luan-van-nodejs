@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     Commodities.init(
         {
             name: DataTypes.STRING,
+            description: DataTypes.STRING,
         },
         {
             sequelize,

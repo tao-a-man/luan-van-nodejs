@@ -84,11 +84,18 @@ export const handleGetDoctorBySpecialist = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
             const infoDoctor = await db.User.findAll({
+                attributes: { exclude: ['password'] },
                 include: [
                     {
                         model: db.Manager,
                         where: { specialistId: id },
                         as: 'managerData',
+                        include: [
+                            {
+                                model: db.Specialist,
+                                as: 'specialistData',
+                            },
+                        ],
                     },
                 ],
                 raw: true,
@@ -96,6 +103,39 @@ export const handleGetDoctorBySpecialist = (id) => {
             });
             resolve(infoDoctor);
         } catch (e) {
+            reject(e);
+        }
+    });
+};
+export const handlePostCreateSpecialist = (specialist) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await db.Specialist.create({ ...specialist });
+            resolve();
+        } catch (e) {
+            console.log(e);
+            reject(e);
+        }
+    });
+};
+export const handlePutEditSpecialist = (specialist) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await db.Specialist.update(specialist, { where: { id: specialist.id } });
+            resolve();
+        } catch (e) {
+            console.log(e);
+            reject(e);
+        }
+    });
+};
+export const handleDeleteSpecialist = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await db.Specialist.destroy({ where: { id: id } });
+            resolve();
+        } catch (e) {
+            console.log(e);
             reject(e);
         }
     });

@@ -4,6 +4,9 @@ import {
     handleUpdateDetailDoctor,
     handleGetInfoDetailDoctor,
     handleGetDoctorBySpecialist,
+    handlePostCreateSpecialist,
+    handlePutEditSpecialist,
+    handleDeleteSpecialist,
 } from '../services/appServices';
 const appController = (function home() {
     return {
@@ -89,6 +92,54 @@ const appController = (function home() {
                 })
                 .catch((err) => {
                     console.log(err);
+                    return res.status(200).json({
+                        errCode: 1,
+                        errMessage: err,
+                    });
+                });
+        },
+        postCreateSpecialist(req, res) {
+            const specialist = req.body;
+            handlePostCreateSpecialist(specialist)
+                .then(() => {
+                    return res.status(200).json({
+                        errCode: 0,
+                        errMessage: 'Create Specialist Success',
+                    });
+                })
+                .catch((err) => {
+                    return res.status(200).json({
+                        errCode: 1,
+                        errMessage: err,
+                    });
+                });
+        },
+        putEditSpecialist(req, res) {
+            const specialist = req.body;
+            handlePutEditSpecialist(specialist)
+                .then(() => {
+                    return res.status(200).json({
+                        errCode: 0,
+                        errMessage: 'Edit Specialist Success',
+                    });
+                })
+                .catch((err) => {
+                    return res.status(200).json({
+                        errCode: 1,
+                        errMessage: err,
+                    });
+                });
+        },
+        deleteSpecialist(req, res) {
+            const id = req.body.id;
+            handleDeleteSpecialist(id)
+                .then(() => {
+                    return res.status(200).json({
+                        errCode: 0,
+                        errMessage: 'Delete Specialist Success',
+                    });
+                })
+                .catch((err) => {
                     return res.status(200).json({
                         errCode: 1,
                         errMessage: err,

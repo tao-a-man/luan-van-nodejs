@@ -20,6 +20,10 @@ function initWebRoutes(app) {
     router.put('/api/update-detail-doctor', appController.updateDetailDoctor);
     router.get('/api/get-doctor-by-specialist', appController.getDoctorBySpecialist);
 
+    router.post('/api/create-specialist', appController.postCreateSpecialist);
+    router.put('/api/edit-specialist', appController.putEditSpecialist);
+    router.delete('/api/delete-specialist', appController.deleteSpecialist);
+
     return app.use('/', router);
 }
 

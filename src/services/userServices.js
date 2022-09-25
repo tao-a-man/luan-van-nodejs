@@ -114,7 +114,9 @@ export const handleUpdateUser = (data) => {
             await db.User.update(data, {
                 where: { id: data.id },
             });
-            await db.Manager.update(data, {
+            const newData = { ...data };
+            delete newData.id;
+            await db.Manager.update(newData, {
                 where: { userId: data.id },
             });
             resolve();

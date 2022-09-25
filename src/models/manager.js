@@ -22,6 +22,10 @@ module.exports = (sequelize, DataTypes) => {
                 targetKey: 'doctorId',
                 as: 'markdownData',
             });
+            Manager.belongsTo(models.Specialist, {
+                foreignKey: 'specialistId',
+                as: 'specialistData',
+            });
         }
     }
     Manager.init(
