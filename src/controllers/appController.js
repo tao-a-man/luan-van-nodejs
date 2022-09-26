@@ -1,6 +1,5 @@
 import {
     handleGetSpecialist,
-    handleGetCommodities,
     handleUpdateDetailDoctor,
     handleGetInfoDetailDoctor,
     handleGetDoctorBySpecialist,
@@ -28,24 +27,7 @@ const appController = (function home() {
                     });
                 });
         },
-        getCommodities(req, res) {
-            handleGetCommodities()
-                .then((commodities) => {
-                    return res.status(200).json({
-                        errCode: 0,
-                        errMessage: 'Get Specialist Success',
-                        commodities,
-                    });
-                })
-                .catch((err) => {
-                    console.log(err);
-                    return res.status(200).json({
-                        errCode: 1,
-                        errMessage: err.errMessage,
-                        commodities: [],
-                    });
-                });
-        },
+
         updateDetailDoctor(req, res) {
             handleUpdateDetailDoctor(req.body)
                 .then(() => {

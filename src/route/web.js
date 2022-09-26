@@ -14,15 +14,17 @@ function initWebRoutes(app) {
     router.delete('/api/delete-user', auth, userController.postDeleteUser);
 
     // API Chuyên khoa
-    router.get('/api/get-specialist', appController.getSpecialist);
-    router.get('/api/get-commodities', appController.getCommodities);
     router.get('/api/get-info-detail-doctor', appController.getInfoDetailDoctor);
     router.put('/api/update-detail-doctor', appController.updateDetailDoctor);
     router.get('/api/get-doctor-by-specialist', appController.getDoctorBySpecialist);
 
+    // Specialist
+    router.get('/api/get-specialist', appController.getSpecialist);
     router.post('/api/create-specialist', appController.postCreateSpecialist);
     router.put('/api/edit-specialist', appController.putEditSpecialist);
     router.delete('/api/delete-specialist', appController.deleteSpecialist);
+
+    // Schedule
 
     return app.use('/', router);
 }

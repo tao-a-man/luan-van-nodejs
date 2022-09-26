@@ -100,6 +100,7 @@ export const handleCreateUser = (data) => {
                 await db.Manager.create({
                     userId: user.dataValues.id,
                     roleId: 'R2',
+                    position: 'Bác sĩ',
                 });
             }
             resolve();

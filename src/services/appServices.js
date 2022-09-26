@@ -10,16 +10,6 @@ export const handleGetSpecialist = () => {
         }
     });
 };
-export const handleGetCommodities = () => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const commodities = await db.Commodities.findAll({ raw: true });
-            resolve(commodities);
-        } catch (e) {
-            reject(e);
-        }
-    });
-};
 export const handleGetInfoDetailDoctor = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -94,6 +84,11 @@ export const handleGetDoctorBySpecialist = (id) => {
                             {
                                 model: db.Specialist,
                                 as: 'specialistData',
+                            },
+                            {
+                                model: db.MarkdownDoctor,
+                                as: 'markdownData',
+                                attributes: ['description'],
                             },
                         ],
                     },
