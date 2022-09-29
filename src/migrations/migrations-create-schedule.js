@@ -11,6 +11,9 @@ module.exports = {
             isBooking: {
                 type: Sequelize.BOOLEAN,
             },
+            isDoing: {
+                type: Sequelize.BOOLEAN,
+            },
             date: {
                 type: Sequelize.DATE,
             },

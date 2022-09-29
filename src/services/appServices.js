@@ -135,3 +135,92 @@ export const handleDeleteSpecialist = (id) => {
         }
     });
 };
+export const handleGetScheduleByDoctorId = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const schedule = await db.Schedule.findAll({
+                where: { doctorId: id },
+            });
+            resolve(schedule);
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+export const handlePostCreateScheduleAutomatic = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            var today = new Date();
+            // delete Schedule today
+            var formatToday = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0));
+            await db.Schedule.destroy({ where: { date: formatToday } });
+            // add Schedule next week
+            var nextweek = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate() + 13, 0, 0, 0));
+            const ids = await db.Manager.findAll({ where: { roleId: 'R2' }, attributes: ['userId'] });
+            const timeType = await db.Allcode.findAll({ where: { type: 'TIME' }, attributes: ['keyMap'] });
+
+            var newArray = [];
+            ids.forEach((id) => {
+                timeType.forEach((time) => {
+                    newArray.push({
+                        doctorId: id.userId,
+                        timeType: time.keyMap,
+                        date: nextweek,
+                        isBooking: false,
+                        isDoing: true,
+                    });
+                });
+            });
+            await db.Schedule.bulkCreate(newArray);
+            resolve();
+        } catch (e) {
+            console.log(e);
+            reject(e);
+        }
+    });
+};
+export const handleGetAllcodeByType = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const infoDoctor = await db.Allcode.findAll({
+                where: { type: 'TIME' },
+                attributes: ['keyMap', 'valueVi'],
+                raw: true,
+            });
+            resolve(infoDoctor);
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+export const handlePatchBulkUpdateSchedule = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const doctorId = data.id;
+            const date = new Date(`${data.date}`);
+            const times = data.times;
+            await db.Schedule.update(
+                { isDoing: true },
+                {
+                    where: {
+                        date: date,
+                        doctorId: doctorId,
+                    },
+                },
+            );
+            await db.Schedule.update(
+                { isDoing: false },
+                {
+                    where: {
+                        timeType: times,
+                        date: date,
+                        doctorId: doctorId,
+                    },
+                },
+            );
+            resolve();
+        } catch (e) {
+            reject(e);
+        }
+    });
+};

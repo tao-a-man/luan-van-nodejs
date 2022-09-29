@@ -6,6 +6,10 @@ import {
     handlePostCreateSpecialist,
     handlePutEditSpecialist,
     handleDeleteSpecialist,
+    handleGetScheduleByDoctorId,
+    handlePostCreateScheduleAutomatic,
+    handleGetAllcodeByType,
+    handlePatchBulkUpdateSchedule,
 } from '../services/appServices';
 const appController = (function home() {
     return {
@@ -122,6 +126,60 @@ const appController = (function home() {
                     });
                 })
                 .catch((err) => {
+                    return res.status(200).json({
+                        errCode: 1,
+                        errMessage: err,
+                    });
+                });
+        },
+        getScheduleByDoctorId(req, res) {
+            const id = req.query.id;
+            handleGetScheduleByDoctorId(id)
+                .then((respon) => {
+                    return res.status(200).json({
+                        errCode: 0,
+                        errMessage: 'Get Doctor Success',
+                        schedule: respon,
+                    });
+                })
+                .catch((err) => {
+                    console.log(err);
+                    return res.status(200).json({
+                        errCode: 1,
+                        errMessage: err,
+                    });
+                });
+        },
+        postCreateScheduleAutomatic(req, res) {
+            handlePostCreateScheduleAutomatic();
+        },
+        getAllcodeByType(req, res) {
+            handleGetAllcodeByType()
+                .then((respon) => {
+                    return res.status(200).json({
+                        errCode: 0,
+                        errMessage: 'Get Doctor Success',
+                        time: respon,
+                    });
+                })
+                .catch((err) => {
+                    console.log(err);
+                    return res.status(200).json({
+                        errCode: 1,
+                        errMessage: err,
+                    });
+                });
+        },
+        patchBulkUpdateSchedule(req, res) {
+            handlePatchBulkUpdateSchedule(req.body)
+                .then(() => {
+                    return res.status(200).json({
+                        errCode: 0,
+                        errMessage: 'Update Schedule Success',
+                    });
+                })
+                .catch((err) => {
+                    console.log(err);
                     return res.status(200).json({
                         errCode: 1,
                         errMessage: err,

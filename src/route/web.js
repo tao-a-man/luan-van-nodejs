@@ -25,6 +25,13 @@ function initWebRoutes(app) {
     router.delete('/api/delete-specialist', appController.deleteSpecialist);
 
     // Schedule
+    router.get('/api/get/schedule-by-doctor-id', appController.getScheduleByDoctorId);
+    // auto run in every week
+    router.post('/api/create-schedule-automatic', appController.postCreateScheduleAutomatic);
+    // get all code by type = time\
+    router.get('/api/get-all-code-type-time', appController.getAllcodeByType);
+    //bulk update schedule
+    router.patch('/api/bulk-update-schedule', appController.patchBulkUpdateSchedule);
 
     return app.use('/', router);
 }

@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     Schedule.init(
         {
             isBooking: DataTypes.BOOLEAN,
+            isDoing: DataTypes.BOOLEAN,
             date: DataTypes.DATE,
             timeType: DataTypes.STRING,
             doctorId: DataTypes.INTEGER,
