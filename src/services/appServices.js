@@ -78,7 +78,7 @@ export const handleGetDoctorBySpecialist = (id) => {
                 include: [
                     {
                         model: db.Manager,
-                        where: { specialistId: id },
+                        where: { specialistId: id, roleId: 'R2' },
                         as: 'managerData',
                         include: [
                             {
@@ -220,6 +220,18 @@ export const handlePatchBulkUpdateSchedule = (data) => {
             );
             resolve();
         } catch (e) {
+            reject(e);
+        }
+    });
+};
+export const handlePostCreateBooking = (infoBooking, currentUser) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            console.log(infoBooking, currentUser);
+            // await db.Booking.create({ ...infoBooking });
+            resolve();
+        } catch (e) {
+            console.log(e);
             reject(e);
         }
     });

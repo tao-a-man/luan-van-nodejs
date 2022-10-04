@@ -10,6 +10,7 @@ import {
     handlePostCreateScheduleAutomatic,
     handleGetAllcodeByType,
     handlePatchBulkUpdateSchedule,
+    handlePostCreateBooking,
 } from '../services/appServices';
 const appController = (function home() {
     return {
@@ -180,6 +181,24 @@ const appController = (function home() {
                 })
                 .catch((err) => {
                     console.log(err);
+                    return res.status(200).json({
+                        errCode: 1,
+                        errMessage: err,
+                    });
+                });
+        },
+        postCreateBooking(req, res) {
+            const infoBooking = req.body;
+            const currentUser = req.currentUser;
+            handlePostCreateBooking(infoBooking, currentUser)
+                .then(() => {
+                    return res.status(200).json({
+                        errCode: 0,
+                        errMessage:
+                            'Đặt lịch thành công vui lòng kiểm tra email của tài khoản hiện tại để xác nhận hoàn thành đặt lịch',
+                    });
+                })
+                .catch((err) => {
                     return res.status(200).json({
                         errCode: 1,
                         errMessage: err,

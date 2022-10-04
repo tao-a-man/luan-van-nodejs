@@ -6,7 +6,7 @@ export const auth = async (req, res, next) => {
     try {
         const decoded = jwt.verify(token, 'shhhhh');
         const id = decoded.id;
-        const user = await db.User.findOne({ where: { id: id }, raw: true });
+        const user = id;
         req.currentUser = user;
         next();
     } catch (err) {

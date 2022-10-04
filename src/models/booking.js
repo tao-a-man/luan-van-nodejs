@@ -13,8 +13,12 @@ module.exports = (sequelize, DataTypes) => {
         {
             userId: DataTypes.INTEGER,
             doctorId: DataTypes.INTEGER,
+            fullName: DataTypes.STRING,
+            gender: DataTypes.STRING,
+            birthDate: DataTypes.STRING,
             status: DataTypes.STRING,
-            date: DataTypes.DATE,
+            date: DataTypes.STRING,
+            description: DataTypes.STRING,
         },
         {
             sequelize,

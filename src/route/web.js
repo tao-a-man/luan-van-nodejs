@@ -33,6 +33,9 @@ function initWebRoutes(app) {
     //bulk update schedule
     router.patch('/api/bulk-update-schedule', appController.patchBulkUpdateSchedule);
 
+    // Api Booking
+    router.post('/api/post-create-booking', auth, appController.postCreateBooking);
+
     return app.use('/', router);
 }
 

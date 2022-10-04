@@ -11,6 +11,15 @@ module.exports = {
             userId: {
                 type: Sequelize.INTEGER,
             },
+            fullName: {
+                type: Sequelize.STRING,
+            },
+            gender: {
+                type: Sequelize.STRING,
+            },
+            birthDate: {
+                type: Sequelize.STRING,
+            },
             doctorId: {
                 type: Sequelize.INTEGER,
             },
@@ -18,7 +27,10 @@ module.exports = {
                 type: Sequelize.STRING,
             },
             date: {
-                type: Sequelize.DATE,
+                type: Sequelize.STRING,
+            },
+            description: {
+                type: Sequelize.STRING,
             },
             createdAt: {
                 allowNull: false,
