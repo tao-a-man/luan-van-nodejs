@@ -21,11 +21,6 @@ export const handleGetInfoDetailDoctor = (id) => {
                         as: 'markdownData',
                         attributes: ['contentHTML', 'contentMarkdown', 'description'],
                     },
-                    {
-                        model: db.PhoneNumber,
-                        as: 'phone',
-                        attributes: ['phoneNumber'],
-                    },
                 ],
                 raw: true,
                 nest: true,
@@ -37,6 +32,7 @@ export const handleGetInfoDetailDoctor = (id) => {
     });
 };
 export const handleUpdateDetailDoctor = (user) => {
+    console.log(user);
     return new Promise(async (resolve, reject) => {
         try {
             await db.Manager.update(user, { where: { userId: +user.userId } });
@@ -51,20 +47,7 @@ export const handleUpdateDetailDoctor = (user) => {
             if (markDown && !markDownCreated) {
                 await db.MarkdownDoctor.update(user, { where: { doctorId: +user.userId } });
             }
-            let result = '1';
-            if (user.phoneNumber) {
-                const [phone, phoneCreated] = await db.PhoneNumber.findOrCreate({
-                    where: { userId: +user.userId },
-                    defaults: {
-                        phoneNumber: user.phoneNumber,
-                        userId: +user.userId,
-                    },
-                });
-                if (phone && !phoneCreated) {
-                    await db.PhoneNumber.update(user, { where: { userId: +user.userId } });
-                }
-            }
-            resolve(result);
+            resolve();
         } catch (e) {
             reject(e);
         }
@@ -227,8 +210,8 @@ export const handlePatchBulkUpdateSchedule = (data) => {
 export const handlePostCreateBooking = (infoBooking, currentUser) => {
     return new Promise(async (resolve, reject) => {
         try {
-            console.log(infoBooking, currentUser);
-            // await db.Booking.create({ ...infoBooking });
+            await db.Booking.create({ ...infoBooking, userId: currentUser });
+            await db.Schedule.update({ isBooking: true }, { where: { id: infoBooking.scheduleId } });
             resolve();
         } catch (e) {
             console.log(e);

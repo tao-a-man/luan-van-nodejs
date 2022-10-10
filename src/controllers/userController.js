@@ -20,6 +20,7 @@ const userController = (function home() {
                             errMessage: userChecked.errMessage,
                             token: userChecked.token ? userChecked.token : null,
                             roleId: userChecked.user ? userChecked.user.managerData.roleId : null,
+                            firstName: userChecked.user ? userChecked.user.firstName : null,
                         });
                     })
                     .catch((err) => {
