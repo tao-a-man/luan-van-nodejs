@@ -11,6 +11,7 @@ import {
     handleGetAllcodeByType,
     handlePatchBulkUpdateSchedule,
     handlePostCreateBooking,
+    handleGetBookingByUserId,
 } from '../services/appServices';
 const appController = (function home() {
     return {
@@ -32,7 +33,25 @@ const appController = (function home() {
                     });
                 });
         },
-
+        getBookingByUserId(req, res) {
+            const id = req.currentUser;
+            handleGetBookingByUserId(id)
+                .then((booking) => {
+                    return res.status(200).json({
+                        errCode: 0,
+                        errMessage: 'Get Specialist Success',
+                        booking,
+                    });
+                })
+                .catch((err) => {
+                    console.log(err);
+                    return res.status(200).json({
+                        errCode: 1,
+                        errMessage: err.errMessage,
+                        booking: [],
+                    });
+                });
+        },
         updateDetailDoctor(req, res) {
             handleUpdateDetailDoctor(req.body)
                 .then(() => {

@@ -10,6 +10,34 @@ export const handleGetSpecialist = () => {
         }
     });
 };
+export const handleGetBookingByUserId = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const doctor = await db.Booking.findAll({
+                where: { userId: id },
+                include: [
+                    {
+                        model: db.Manager,
+                        as: 'managerData',
+                        attributes: { exclude: ['image'] },
+                        include: [
+                            {
+                                model: db.User,
+                                as: 'userData',
+                                attributes: ['firstName', 'lastName'],
+                            },
+                        ],
+                    },
+                ],
+                raw: true,
+                nest: true,
+            });
+            resolve(doctor);
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
 export const handleGetInfoDetailDoctor = (id) => {
     return new Promise(async (resolve, reject) => {
         try {

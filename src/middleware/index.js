@@ -6,8 +6,7 @@ export const auth = async (req, res, next) => {
     try {
         const decoded = jwt.verify(token, 'shhhhh');
         const id = decoded.id;
-        const user = id;
-        req.currentUser = user;
+        req.currentUser = id;
         next();
     } catch (err) {
         return res.status(401).json('Require Signin');

@@ -13,7 +13,7 @@ function initWebRoutes(app) {
     router.put('/api/update-user', userController.postUpdateUser);
     router.delete('/api/delete-user', auth, userController.postDeleteUser);
 
-    // API Chuyên khoa
+    // API Chuyên khoa;
     router.get('/api/get-info-detail-doctor', appController.getInfoDetailDoctor);
     router.put('/api/update-detail-doctor', appController.updateDetailDoctor);
     router.get('/api/get-doctor-by-specialist', appController.getDoctorBySpecialist);
@@ -35,6 +35,7 @@ function initWebRoutes(app) {
 
     // Api Booking
     router.post('/api/post-create-booking', auth, appController.postCreateBooking);
+    router.get('/api/get-booking-by-user-id', auth, appController.getBookingByUserId);
 
     return app.use('/', router);
 }

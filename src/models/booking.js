@@ -7,7 +7,13 @@ module.exports = (sequelize, DataTypes) => {
          * This method is not a part of Sequelize lifecycle.
          * The `models/index` file will call this method automatically.
          */
-        static associate(models) {}
+        static associate(models) {
+            Booking.belongsTo(models.Manager, {
+                foreignKey: 'doctorId',
+                targetKey: 'userId',
+                as: 'managerData',
+            });
+        }
     }
     Booking.init(
         {
