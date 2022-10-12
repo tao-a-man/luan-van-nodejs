@@ -36,6 +36,7 @@ function initWebRoutes(app) {
     // Api Booking
     router.post('/api/post-create-booking', auth, appController.postCreateBooking);
     router.get('/api/get-booking-by-user-id', auth, appController.getBookingByUserId);
+    router.delete('/api/delete-booking', appController.deleteBooking);
 
     return app.use('/', router);
 }

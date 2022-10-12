@@ -2,29 +2,29 @@ module.exports = {
     up(queryInterface, Sequelize) {
         return Promise.all([
             queryInterface.addColumn(
-                'Managers', // table name
-                'phoneNumber', // new field name
-                {
-                    type: Sequelize.STRING,
-                    allowNull: true,
-                },
-            ),
-            queryInterface.addColumn(
                 'Bookings', // table name
-                'phoneNumberPatient', // new field name
+                'scheduleId', // new field name
                 {
-                    type: Sequelize.STRING,
+                    type: Sequelize.INTEGER,
                     allowNull: true,
                 },
             ),
-            queryInterface.addColumn(
-                'Bookings', // table name
-                'addressPatient', // new field name
-                {
-                    type: Sequelize.STRING,
-                    allowNull: true,
-                },
-            ),
+            // queryInterface.addColumn(
+            //     'Bookings', // table name
+            //     'phoneNumberPatient', // new field name
+            //     {
+            //         type: Sequelize.STRING,
+            //         allowNull: true,
+            //     },
+            // ),
+            // queryInterface.addColumn(
+            //     'Bookings', // table name
+            //     'addressPatient', // new field name
+            //     {
+            //         type: Sequelize.STRING,
+            //         allowNull: true,
+            //     },
+            // ),
             // queryInterface.addColumn(
             //     'Managers', // table name
             //     'regions', // new field name

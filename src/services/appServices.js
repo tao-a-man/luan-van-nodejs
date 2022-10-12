@@ -247,3 +247,15 @@ export const handlePostCreateBooking = (infoBooking, currentUser) => {
         }
     });
 };
+export const handleDeleteBooking = (scheduleId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await db.Booking.destroy({ where: { scheduleId } });
+            await db.Schedule.update({ isBooking: false }, { where: { id: scheduleId } });
+            resolve();
+        } catch (e) {
+            console.log(e);
+            reject(e);
+        }
+    });
+};

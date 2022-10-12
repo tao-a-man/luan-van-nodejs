@@ -12,6 +12,7 @@ import {
     handlePatchBulkUpdateSchedule,
     handlePostCreateBooking,
     handleGetBookingByUserId,
+    handleDeleteBooking,
 } from '../services/appServices';
 const appController = (function home() {
     return {
@@ -30,25 +31,6 @@ const appController = (function home() {
                         errCode: 1,
                         errMessage: err.errMessage,
                         specialist: [],
-                    });
-                });
-        },
-        getBookingByUserId(req, res) {
-            const id = req.currentUser;
-            handleGetBookingByUserId(id)
-                .then((booking) => {
-                    return res.status(200).json({
-                        errCode: 0,
-                        errMessage: 'Get Specialist Success',
-                        booking,
-                    });
-                })
-                .catch((err) => {
-                    console.log(err);
-                    return res.status(200).json({
-                        errCode: 1,
-                        errMessage: err.errMessage,
-                        booking: [],
                     });
                 });
         },
@@ -221,6 +203,41 @@ const appController = (function home() {
                     return res.status(200).json({
                         errCode: 1,
                         errMessage: err,
+                    });
+                });
+        },
+        getBookingByUserId(req, res) {
+            const id = req.currentUser;
+            handleGetBookingByUserId(id)
+                .then((booking) => {
+                    return res.status(200).json({
+                        errCode: 0,
+                        errMessage: 'Get Booking Success',
+                        booking,
+                    });
+                })
+                .catch((err) => {
+                    console.log(err);
+                    return res.status(200).json({
+                        errCode: 1,
+                        errMessage: err.errMessage,
+                        booking: [],
+                    });
+                });
+        },
+        deleteBooking(req, res) {
+            const scheduleId = req.body.scheduleId;
+            handleDeleteBooking(scheduleId)
+                .then(() => {
+                    return res.status(200).json({
+                        errCode: 0,
+                        errMessage: 'Delete Booking Success',
+                    });
+                })
+                .catch((err) => {
+                    return res.status(200).json({
+                        errCode: 1,
+                        errMessage: err.errMessage,
                     });
                 });
         },
