@@ -21,6 +21,10 @@ const userController = (function home() {
                             token: userChecked.token ? userChecked.token : null,
                             roleId: userChecked.user ? userChecked.user.managerData.roleId : null,
                             firstName: userChecked.user ? userChecked.user.firstName : null,
+                            lastName: userChecked.user ? userChecked.user.lastName : null,
+                            email: userChecked.user ? userChecked.user.email : null,
+                            age: userChecked.user ? userChecked.user.age : null,
+                            id: userChecked.user ? userChecked.user.id : null,
                         });
                     })
                     .catch((err) => {

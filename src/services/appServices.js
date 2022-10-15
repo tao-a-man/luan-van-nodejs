@@ -13,26 +13,50 @@ export const handleGetSpecialist = () => {
 export const handleGetBookingByUserId = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const doctor = await db.Booking.findAll({
-                where: { userId: id },
-                include: [
-                    {
-                        model: db.Manager,
-                        as: 'managerData',
-                        attributes: { exclude: ['image'] },
-                        include: [
-                            {
-                                model: db.User,
-                                as: 'userData',
-                                attributes: ['firstName', 'lastName'],
-                            },
-                        ],
-                    },
-                ],
-                raw: true,
-                nest: true,
-            });
-            resolve(doctor);
+            const role = await db.Manager.findOne({ where: { userId: id }, attributes: ['roleId'] });
+            if (role) {
+                const doctor = await db.Booking.findAll({
+                    where: { doctorId: id },
+                    include: [
+                        {
+                            model: db.Manager,
+                            as: 'managerData',
+                            attributes: { exclude: ['image'] },
+                            include: [
+                                {
+                                    model: db.User,
+                                    as: 'userData',
+                                    attributes: ['firstName', 'lastName'],
+                                },
+                            ],
+                        },
+                    ],
+                    raw: true,
+                    nest: true,
+                });
+                resolve(doctor);
+            } else {
+                const doctor = await db.Booking.findAll({
+                    where: { userId: id },
+                    include: [
+                        {
+                            model: db.Manager,
+                            as: 'managerData',
+                            attributes: { exclude: ['image'] },
+                            include: [
+                                {
+                                    model: db.User,
+                                    as: 'userData',
+                                    attributes: ['firstName', 'lastName'],
+                                },
+                            ],
+                        },
+                    ],
+                    raw: true,
+                    nest: true,
+                });
+                resolve(doctor);
+            }
         } catch (e) {
             reject(e);
         }
@@ -60,7 +84,6 @@ export const handleGetInfoDetailDoctor = (id) => {
     });
 };
 export const handleUpdateDetailDoctor = (user) => {
-    console.log(user);
     return new Promise(async (resolve, reject) => {
         try {
             await db.Manager.update(user, { where: { userId: +user.userId } });
@@ -99,7 +122,7 @@ export const handleGetDoctorBySpecialist = (id) => {
                             {
                                 model: db.MarkdownDoctor,
                                 as: 'markdownData',
-                                attributes: ['description'],
+                                attributes: ['description', 'contentHTML'],
                             },
                         ],
                     },
@@ -161,6 +184,7 @@ export const handleGetScheduleByDoctorId = (id) => {
 export const handlePostCreateScheduleAutomatic = () => {
     return new Promise(async (resolve, reject) => {
         try {
+            console.log('hi');
             var today = new Date();
             // delete Schedule today
             var formatToday = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0));
