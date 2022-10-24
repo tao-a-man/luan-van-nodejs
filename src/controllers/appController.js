@@ -13,6 +13,7 @@ import {
     handlePostCreateBooking,
     handleGetBookingByUserId,
     handleDeleteBooking,
+    handleAcceptBooking,
 } from '../services/appServices';
 const appController = (function home() {
     return {
@@ -228,6 +229,22 @@ const appController = (function home() {
         deleteBooking(req, res) {
             const scheduleId = req.body.scheduleId;
             handleDeleteBooking(scheduleId)
+                .then(() => {
+                    return res.status(200).json({
+                        errCode: 0,
+                        errMessage: 'Delete Booking Success',
+                    });
+                })
+                .catch((err) => {
+                    return res.status(200).json({
+                        errCode: 1,
+                        errMessage: err.errMessage,
+                    });
+                });
+        },
+        acceptBooking(req, res) {
+            const bookingId = req.body.id;
+            handleAcceptBooking(bookingId)
                 .then(() => {
                     return res.status(200).json({
                         errCode: 0,

@@ -283,3 +283,14 @@ export const handleDeleteBooking = (scheduleId) => {
         }
     });
 };
+export const handleAcceptBooking = (bookingId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await db.Booking.update({ status: 'Đã xác nhận' }, { where: { id: bookingId } });
+            resolve();
+        } catch (e) {
+            console.log(e);
+            reject(e);
+        }
+    });
+};
