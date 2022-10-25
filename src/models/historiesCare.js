@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
         {
             bookingId: DataTypes.INTEGER,
             description: DataTypes.STRING,
+            timeReExam: DataTypes.INTEGER,
         },
         {
             sequelize,

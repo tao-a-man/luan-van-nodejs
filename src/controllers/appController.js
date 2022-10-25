@@ -14,6 +14,7 @@ import {
     handleGetBookingByUserId,
     handleDeleteBooking,
     handleAcceptBooking,
+    handlePostCreateHistoryCare,
 } from '../services/appServices';
 const appController = (function home() {
     return {
@@ -154,7 +155,21 @@ const appController = (function home() {
                 });
         },
         postCreateScheduleAutomatic(req, res) {
-            handlePostCreateScheduleAutomatic();
+            handlePostCreateScheduleAutomatic()
+                .then((respon) => {
+                    return res.status(200).json({
+                        errCode: 0,
+                        errMessage: 'Get Doctor Success',
+                        time: respon,
+                    });
+                })
+                .catch((err) => {
+                    console.log(err);
+                    return res.status(200).json({
+                        errCode: 1,
+                        errMessage: err,
+                    });
+                });
         },
         getAllcodeByType(req, res) {
             handleGetAllcodeByType()
@@ -249,6 +264,23 @@ const appController = (function home() {
                     return res.status(200).json({
                         errCode: 0,
                         errMessage: 'Delete Booking Success',
+                    });
+                })
+                .catch((err) => {
+                    return res.status(200).json({
+                        errCode: 1,
+                        errMessage: err.errMessage,
+                    });
+                });
+        },
+        postCreateHistoryCare(req, res) {
+            const data = req.body;
+            const id = req.currentUser;
+            handlePostCreateHistoryCare(data, id)
+                .then(() => {
+                    return res.status(200).json({
+                        errCode: 0,
+                        errMessage: 'Create Hisrory Success',
                     });
                 })
                 .catch((err) => {

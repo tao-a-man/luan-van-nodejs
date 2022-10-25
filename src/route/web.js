@@ -39,6 +39,9 @@ function initWebRoutes(app) {
     router.delete('/api/delete-booking', appController.deleteBooking);
     router.put('/api/accept-booking', appController.acceptBooking);
 
+    // Api reExam and historycare
+    router.post('/api/post-create-historycare', auth, appController.postCreateHistoryCare);
+
     return app.use('/', router);
 }
 

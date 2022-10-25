@@ -14,10 +14,7 @@ module.exports = {
             description: {
                 type: Sequelize.STRING,
             },
-            reExamin: {
-                type: Sequelize.INTEGER,
-            },
-            countExamin: {
+            timeReExam: {
                 type: Sequelize.INTEGER,
             },
             createdAt: {

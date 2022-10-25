@@ -1,4 +1,5 @@
 import db from '../models';
+const { Op } = require('sequelize');
 
 export const handleGetSpecialist = () => {
     return new Promise(async (resolve, reject) => {
@@ -188,9 +189,13 @@ export const handlePostCreateScheduleAutomatic = () => {
             var today = new Date();
             // delete Schedule today
             var formatToday = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0));
-            await db.Schedule.destroy({ where: { date: formatToday } });
+            await db.Schedule.destroy({
+                where: {
+                    [Op.and]: [{ date: formatToday }, { isBooking: false }],
+                },
+            });
             // add Schedule next week
-            var nextweek = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate() + 13, 0, 0, 0));
+            var nextweek = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate() + 8, 0, 0, 0));
             const ids = await db.Manager.findAll({ where: { roleId: 'R2' }, attributes: ['userId'] });
             const timeType = await db.Allcode.findAll({ where: { type: 'TIME' }, attributes: ['keyMap'] });
 
@@ -287,6 +292,38 @@ export const handleAcceptBooking = (bookingId) => {
     return new Promise(async (resolve, reject) => {
         try {
             await db.Booking.update({ status: 'Đã xác nhận' }, { where: { id: bookingId } });
+            resolve();
+        } catch (e) {
+            console.log(e);
+            reject(e);
+        }
+    });
+};
+export const handlePostCreateHistoryCare = (data, doctorId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let scheduleInstance = '';
+            if (data.time && data.date) {
+                scheduleInstance = await db.Schedule.findOne({
+                    where: {
+                        timeType: data.time,
+                        date: data.date,
+                        doctorId: doctorId,
+                    },
+                });
+                await db.Schedule.update(
+                    { isBooking: true },
+                    {
+                        where: {
+                            timeType: data.time,
+                            date: data.date,
+                            doctorId: doctorId,
+                        },
+                    },
+                );
+            }
+            await db.HistoriesCare.create({ ...data, timeReExam: scheduleInstance.id });
+            await db.Booking.update({ status: 'Đã khám' }, { where: { id: data.bookingId } });
             resolve();
         } catch (e) {
             console.log(e);
