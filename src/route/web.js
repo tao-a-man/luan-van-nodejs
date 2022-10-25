@@ -41,6 +41,7 @@ function initWebRoutes(app) {
 
     // Api reExam and historycare
     router.post('/api/post-create-historycare', auth, appController.postCreateHistoryCare);
+    router.get('/api/get-historycare-by-doctor-id', auth, appController.getHistoryCare);
 
     return app.use('/', router);
 }

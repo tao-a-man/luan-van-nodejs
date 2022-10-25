@@ -13,6 +13,14 @@ module.exports = (sequelize, DataTypes) => {
                 targetKey: 'userId',
                 as: 'managerData',
             });
+            Booking.hasMany(models.HistoriesCare, {
+                foreignKey: 'bookingId',
+                as: 'historiesData',
+            });
+            Booking.belongsTo(models.Schedule, {
+                foreignKey: 'scheduleId',
+                as: 'scheduleData',
+            });
         }
     }
     Booking.init(

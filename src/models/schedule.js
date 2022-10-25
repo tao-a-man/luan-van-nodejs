@@ -8,7 +8,19 @@ module.exports = (sequelize, DataTypes) => {
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
-            // define association here
+            Schedule.hasOne(models.Booking, {
+                foreignKey: 'scheduleId',
+                as: 'bookingData',
+            });
+            Schedule.hasOne(models.HistoriesCare, {
+                foreignKey: 'timeReExam',
+                as: 'historiesData',
+            });
+            Schedule.belongsTo(models.Allcode, {
+                foreignKey: 'timeType',
+                targetKey: 'keyMap',
+                as: 'timeData',
+            });
         }
     }
     Schedule.init(

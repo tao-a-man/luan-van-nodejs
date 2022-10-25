@@ -331,3 +331,34 @@ export const handlePostCreateHistoryCare = (data, doctorId) => {
         }
     });
 };
+export const handleGetHistoryCare = (doctorId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const data = await db.HistoriesCare.findAll({
+                include: [
+                    {
+                        model: db.Booking,
+                        where: { doctorId: doctorId },
+                        as: 'bookingData',
+                    },
+                    {
+                        model: db.Schedule,
+                        as: 'scheduleData',
+                        include: [
+                            {
+                                model: db.Allcode,
+                                as: 'timeData',
+                            },
+                        ],
+                    },
+                ],
+                raw: true,
+                nest: true,
+            });
+            resolve(data);
+        } catch (e) {
+            console.log(e);
+            reject(e);
+        }
+    });
+};
