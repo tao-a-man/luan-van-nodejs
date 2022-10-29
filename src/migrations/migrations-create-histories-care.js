@@ -14,6 +14,9 @@ module.exports = {
             description: {
                 type: Sequelize.STRING,
             },
+            status: {
+                type: Sequelize.STRING,
+            },
             timeReExam: {
                 type: Sequelize.INTEGER,
             },

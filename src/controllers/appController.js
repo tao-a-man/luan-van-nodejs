@@ -16,6 +16,8 @@ import {
     handleAcceptBooking,
     handlePostCreateHistoryCare,
     handleGetHistoryCare,
+    handleGetHistoryCareByBookingId,
+    handleGetHistoryCareHaveReExam,
 } from '../services/appServices';
 const appController = (function home() {
     return {
@@ -294,6 +296,39 @@ const appController = (function home() {
         getHistoryCare(req, res) {
             const id = req.currentUser;
             handleGetHistoryCare(id)
+                .then((data) => {
+                    return res.status(200).json({
+                        errCode: 0,
+                        errMessage: 'Create Hisrory Success',
+                        data,
+                    });
+                })
+                .catch((err) => {
+                    return res.status(200).json({
+                        errCode: 1,
+                        errMessage: err.errMessage,
+                    });
+                });
+        },
+        getHistoryCareByBookingId(req, res) {
+            const id = req.query.bookingId;
+            handleGetHistoryCareByBookingId(id)
+                .then((data) => {
+                    return res.status(200).json({
+                        errCode: 0,
+                        errMessage: 'Create Hisrory Success',
+                        data,
+                    });
+                })
+                .catch((err) => {
+                    return res.status(200).json({
+                        errCode: 1,
+                        errMessage: err.errMessage,
+                    });
+                });
+        },
+        getHistoryCareHaveReExam(req, res) {
+            handleGetHistoryCareHaveReExam()
                 .then((data) => {
                     return res.status(200).json({
                         errCode: 0,

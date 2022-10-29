@@ -1,5 +1,6 @@
 import db from '../models';
 const { Op } = require('sequelize');
+const { Sequelize } = require('sequelize');
 
 export const handleGetSpecialist = () => {
     return new Promise(async (resolve, reject) => {
@@ -17,7 +18,7 @@ export const handleGetBookingByUserId = (id) => {
             const role = await db.Manager.findOne({ where: { userId: id }, attributes: ['roleId'] });
             if (role) {
                 const doctor = await db.Booking.findAll({
-                    where: { doctorId: id },
+                    where: { doctorId: id, status: ['Đã xác nhận', 'Đặt thành công'] },
                     include: [
                         {
                             model: db.Manager,
@@ -321,9 +322,13 @@ export const handlePostCreateHistoryCare = (data, doctorId) => {
                         },
                     },
                 );
+                await db.HistoriesCare.create({ ...data, timeReExam: scheduleInstance.id, status: 'Chưa khám' });
+                await db.Booking.update({ status: 'Đã khám' }, { where: { id: data.bookingId } });
+            } else {
+                await db.HistoriesCare.create({ ...data, timeReExam: scheduleInstance.id, status: 'Không tái khám' });
+                await db.Booking.update({ status: 'Đã khám' }, { where: { id: data.bookingId } });
             }
-            await db.HistoriesCare.create({ ...data, timeReExam: scheduleInstance.id });
-            await db.Booking.update({ status: 'Đã khám' }, { where: { id: data.bookingId } });
+
             resolve();
         } catch (e) {
             console.log(e);
@@ -335,10 +340,73 @@ export const handleGetHistoryCare = (doctorId) => {
     return new Promise(async (resolve, reject) => {
         try {
             const data = await db.HistoriesCare.findAll({
+                group: ['bookingId'],
                 include: [
                     {
                         model: db.Booking,
                         where: { doctorId: doctorId },
+                        as: 'bookingData',
+                    },
+                    {
+                        model: db.Schedule,
+                        as: 'scheduleData',
+                        include: [
+                            {
+                                model: db.Allcode,
+                                as: 'timeData',
+                            },
+                        ],
+                    },
+                ],
+                raw: true,
+                nest: true,
+            });
+            resolve(data);
+        } catch (e) {
+            console.log(e);
+            reject(e);
+        }
+    });
+};
+export const handleGetHistoryCareByBookingId = (bookingId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const data = await db.HistoriesCare.findAll({
+                where: { bookingId: bookingId },
+                include: [
+                    {
+                        model: db.Booking,
+                        as: 'bookingData',
+                    },
+                    {
+                        model: db.Schedule,
+                        as: 'scheduleData',
+                        include: [
+                            {
+                                model: db.Allcode,
+                                as: 'timeData',
+                            },
+                        ],
+                    },
+                ],
+                raw: true,
+                nest: true,
+            });
+            resolve(data);
+        } catch (e) {
+            console.log(e);
+            reject(e);
+        }
+    });
+};
+export const handleGetHistoryCareHaveReExam = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const data = await db.HistoriesCare.findAll({
+                where: { status: 'Chưa khám' },
+                include: [
+                    {
+                        model: db.Booking,
                         as: 'bookingData',
                     },
                     {
