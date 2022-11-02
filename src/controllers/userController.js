@@ -4,6 +4,8 @@ import {
     handleCreateUser,
     handleUpdateUser,
     handleDeleteUser,
+    handleGetHistoryCareByUser,
+    handlePostDeleteHistoriesCare,
 } from '../services/userServices';
 const userController = (function home() {
     return {
@@ -77,6 +79,36 @@ const userController = (function home() {
                     res.status(200).json({ errCode: 0, errMessage: 'User delete successfully' });
                 })
                 .catch((err) => {
+                    res.status(200).json({ errCode: 1, errMessage: err });
+                });
+        },
+        getHistoryCareByUser(req, res) {
+            const id = req.currentUser;
+            handleGetHistoryCareByUser(id)
+                .then((data) => {
+                    return res.status(200).json({
+                        errCode: 0,
+                        errMessage: 'Get User Success',
+                        data: data,
+                    });
+                })
+                .catch((err) => {
+                    return res.status(200).json({
+                        errCode: 1,
+                        errMessage: err.errMessage,
+                        user: [],
+                    });
+                });
+        },
+        postDeleteHistoriesCare(req, res) {
+            const id = req.body.id;
+            const idTime = req.body.idTime;
+            handlePostDeleteHistoriesCare(id, idTime)
+                .then(() => {
+                    res.status(200).json({ errCode: 0, errMessage: 'User delete successfully' });
+                })
+                .catch((err) => {
+                    console.log(err);
                     res.status(200).json({ errCode: 1, errMessage: err });
                 });
         },

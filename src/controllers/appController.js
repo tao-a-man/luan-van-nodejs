@@ -328,7 +328,8 @@ const appController = (function home() {
                 });
         },
         getHistoryCareHaveReExam(req, res) {
-            handleGetHistoryCareHaveReExam()
+            const id = req.currentUser;
+            handleGetHistoryCareHaveReExam(id)
                 .then((data) => {
                     return res.status(200).json({
                         errCode: 0,

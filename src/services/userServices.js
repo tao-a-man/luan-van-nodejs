@@ -1,5 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+const { Sequelize } = require('sequelize');
+const Op = Sequelize.Op;
 
 import db from '../models';
 function hashPassword(password) {
@@ -131,6 +133,81 @@ export const handleDeleteUser = (id) => {
         try {
             await db.User.destroy({ where: { id } });
             resolve();
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
+export const handleGetHistoryCareByUser = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const role = await db.Manager.findOne({ where: { userId: id }, attributes: ['roleId'] });
+            if (role) {
+                const doctor = await db.Booking.findAll({
+                    where: { doctorId: id },
+                    include: [
+                        {
+                            model: db.HistoriesCare,
+                            as: 'historiesData',
+                            where: { status: 'Chưa khám' },
+                            include: [
+                                {
+                                    model: db.Schedule,
+                                    as: 'scheduleData',
+                                    include: [
+                                        {
+                                            model: db.Allcode,
+                                            as: 'timeData',
+                                        },
+                                    ],
+                                },
+                            ],
+                        },
+                    ],
+                    raw: true,
+                    nest: true,
+                });
+                resolve(doctor);
+            } else {
+                const doctor = await db.Booking.findAll({
+                    where: { userId: id },
+                    include: [
+                        {
+                            model: db.Manager,
+                            as: 'managerData',
+                            attributes: { exclude: ['image'] },
+                            include: [
+                                {
+                                    model: db.User,
+                                    as: 'userData',
+                                    attributes: ['firstName', 'lastName'],
+                                },
+                            ],
+                        },
+                    ],
+                    raw: true,
+                    nest: true,
+                });
+                resolve(doctor);
+            }
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+export const handlePostDeleteHistoriesCare = (id, idTime) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const check = await db.HistoriesCare.destroy({
+                where: {
+                    [Op.and]: [{ id }, { status: ['Chưa khám'] }],
+                },
+            });
+            console.log(check);
+            if (check) {
+                await db.Schedule.update({ isBooking: 0 }, { where: { id: idTime } });
+            }
+            resolve(check);
         } catch (err) {
             reject(err);
         }

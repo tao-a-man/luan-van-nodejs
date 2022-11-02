@@ -12,6 +12,7 @@ function initWebRoutes(app) {
     router.get('/api/get-all-user', auth, userController.getUser);
     router.put('/api/update-user', userController.postUpdateUser);
     router.delete('/api/delete-user', auth, userController.postDeleteUser);
+    router.delete('/api/delete-hisrories-care', auth, userController.postDeleteHistoriesCare);
 
     // API Chuyên khoa;
     router.get('/api/get-info-detail-doctor', appController.getInfoDetailDoctor);
@@ -44,6 +45,8 @@ function initWebRoutes(app) {
     router.get('/api/get-historycare-by-doctor-id', auth, appController.getHistoryCare);
     router.get('/api/get-historycare-by-booking-id', auth, appController.getHistoryCareByBookingId);
     router.get('/api/get-historycare-have-re-exam', auth, appController.getHistoryCareHaveReExam);
+    // Api reExam of PAtient
+    router.get('/api/get-historycare-by-user-id', auth, userController.getHistoryCareByUser);
 
     return app.use('/', router);
 }

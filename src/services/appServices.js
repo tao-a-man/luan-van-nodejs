@@ -1,6 +1,6 @@
 import db from '../models';
-const { Op } = require('sequelize');
 const { Sequelize } = require('sequelize');
+const Op = Sequelize.Op;
 
 export const handleGetSpecialist = () => {
     return new Promise(async (resolve, reject) => {
@@ -280,8 +280,14 @@ export const handlePostCreateBooking = (infoBooking, currentUser) => {
 export const handleDeleteBooking = (scheduleId) => {
     return new Promise(async (resolve, reject) => {
         try {
-            await db.Booking.destroy({ where: { scheduleId } });
-            await db.Schedule.update({ isBooking: false }, { where: { id: scheduleId } });
+            const check = await db.Booking.destroy({
+                where: {
+                    [Op.and]: [{ scheduleId }, { status: ['Đặt thành công', 'Đã xác nhận'] }],
+                },
+            });
+            if (check) {
+                await db.Schedule.update({ isBooking: false }, { where: { id: scheduleId } });
+            }
             resolve();
         } catch (e) {
             console.log(e);
@@ -304,6 +310,10 @@ export const handlePostCreateHistoryCare = (data, doctorId) => {
     return new Promise(async (resolve, reject) => {
         try {
             let scheduleInstance = '';
+            console.log(data.re, data.bookingId);
+            if (data.re) {
+                await db.HistoriesCare.update({ status: 'Đã khám' }, { where: { bookingId: data.bookingId } });
+            }
             if (data.time && data.date) {
                 scheduleInstance = await db.Schedule.findOne({
                     where: {
@@ -328,7 +338,6 @@ export const handlePostCreateHistoryCare = (data, doctorId) => {
                 await db.HistoriesCare.create({ ...data, timeReExam: scheduleInstance.id, status: 'Không tái khám' });
                 await db.Booking.update({ status: 'Đã khám' }, { where: { id: data.bookingId } });
             }
-
             resolve();
         } catch (e) {
             console.log(e);
@@ -344,7 +353,16 @@ export const handleGetHistoryCare = (doctorId) => {
                 include: [
                     {
                         model: db.Booking,
-                        where: { doctorId: doctorId },
+                        where: {
+                            [Op.or]: [
+                                {
+                                    doctorId: doctorId,
+                                },
+                                {
+                                    userId: doctorId,
+                                },
+                            ],
+                        },
                         as: 'bookingData',
                     },
                     {
@@ -399,7 +417,7 @@ export const handleGetHistoryCareByBookingId = (bookingId) => {
         }
     });
 };
-export const handleGetHistoryCareHaveReExam = () => {
+export const handleGetHistoryCareHaveReExam = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
             const data = await db.HistoriesCare.findAll({
@@ -408,6 +426,24 @@ export const handleGetHistoryCareHaveReExam = () => {
                     {
                         model: db.Booking,
                         as: 'bookingData',
+                        where: {
+                            [Op.or]: [
+                                {
+                                    userId: id,
+                                },
+                                {
+                                    doctorId: id,
+                                },
+                            ],
+                        },
+                        include: [
+                            {
+                                model: db.Manager,
+                                as: 'managerData',
+                                attributes: { exclude: ['image'] },
+                                include: [{ model: db.User, as: 'userData', attributes: ['firstName', 'lastName'] }],
+                            },
+                        ],
                     },
                     {
                         model: db.Schedule,
