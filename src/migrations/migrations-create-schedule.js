@@ -5,7 +5,7 @@ module.exports = {
             id: {
                 allowNull: false,
                 autoIncrement: true,
-                primaryKey: true,
+                unique: true,
                 type: Sequelize.INTEGER,
             },
             isBooking: {
@@ -16,12 +16,15 @@ module.exports = {
             },
             date: {
                 type: Sequelize.DATE,
+                primaryKey: true,
             },
             timeType: {
                 type: Sequelize.STRING,
+                primaryKey: true,
             },
             doctorId: {
                 type: Sequelize.INTEGER,
+                primaryKey: true,
             },
             createdAt: {
                 allowNull: false,

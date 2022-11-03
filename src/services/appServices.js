@@ -196,7 +196,7 @@ export const handlePostCreateScheduleAutomatic = () => {
                 },
             });
             // add Schedule next week
-            var nextweek = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate() + 8, 0, 0, 0));
+            var nextweek = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate() + 7, 0, 0, 0));
             const ids = await db.Manager.findAll({ where: { roleId: 'R2' }, attributes: ['userId'] });
             const timeType = await db.Allcode.findAll({ where: { type: 'TIME' }, attributes: ['keyMap'] });
 
