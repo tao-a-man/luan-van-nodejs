@@ -14,6 +14,7 @@ module.exports = {
                     model: 'Users', // name of Target model
                     key: 'id', // key in Target model that we're referencing
                 },
+                unique: true,
                 onDelete: 'CASCADE',
             },
             roleId: {
@@ -25,10 +26,19 @@ module.exports = {
             price: {
                 type: Sequelize.STRING,
             },
+            position: {
+                type: Sequelize.STRING,
+            },
+            phoneNumber: {
+                type: Sequelize.STRING,
+            },
             addressClinic: {
                 type: Sequelize.STRING,
             },
             nameClinic: {
+                type: Sequelize.STRING,
+            },
+            regions: {
                 type: Sequelize.STRING,
             },
             image: {

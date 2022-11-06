@@ -174,9 +174,15 @@ export const handleDeleteSpecialist = (id) => {
 export const handleGetScheduleByDoctorId = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
+            const today = new Date();
+            var formatToday = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0));
+            console.log(formatToday);
             const schedule = await db.Schedule.findAll({
-                where: { doctorId: id },
+                where: {
+                    [Op.and]: [{ date: { [Op.gte]: formatToday } }, { doctorId: id }],
+                },
             });
+            console.log(schedule);
             resolve(schedule);
         } catch (e) {
             reject(e);
@@ -196,7 +202,7 @@ export const handlePostCreateScheduleAutomatic = () => {
                 },
             });
             // add Schedule next week
-            var nextweek = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate() + 7, 0, 0, 0));
+            var nextweek = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate() + 1, 0, 0, 0));
             const ids = await db.Manager.findAll({ where: { roleId: 'R2' }, attributes: ['userId'] });
             const timeType = await db.Allcode.findAll({ where: { type: 'TIME' }, attributes: ['keyMap'] });
 

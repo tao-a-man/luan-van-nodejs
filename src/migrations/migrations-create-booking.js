@@ -29,6 +29,15 @@ module.exports = {
             date: {
                 type: Sequelize.STRING,
             },
+            scheduleId: {
+                type: Sequelize.INTEGER,
+            },
+            phoneNumberPatient: {
+                type: Sequelize.STRING,
+            },
+            addressPatient: {
+                type: Sequelize.STRING,
+            },
             description: {
                 type: Sequelize.STRING,
             },
