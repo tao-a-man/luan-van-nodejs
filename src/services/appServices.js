@@ -1,4 +1,5 @@
 import db from '../models';
+import mailer from '../util/mailer';
 const { Sequelize } = require('sequelize');
 const Op = Sequelize.Op;
 
@@ -176,13 +177,11 @@ export const handleGetScheduleByDoctorId = (id) => {
         try {
             const today = new Date();
             var formatToday = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0));
-            console.log(formatToday);
             const schedule = await db.Schedule.findAll({
                 where: {
                     [Op.and]: [{ date: { [Op.gte]: formatToday } }, { doctorId: id }],
                 },
             });
-            console.log(schedule);
             resolve(schedule);
         } catch (e) {
             reject(e);
@@ -192,7 +191,6 @@ export const handleGetScheduleByDoctorId = (id) => {
 export const handlePostCreateScheduleAutomatic = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            console.log('hi');
             var today = new Date();
             // delete Schedule today
             var formatToday = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0));
@@ -276,6 +274,11 @@ export const handlePostCreateBooking = (infoBooking, currentUser) => {
         try {
             await db.Booking.create({ ...infoBooking, userId: currentUser });
             await db.Schedule.update({ isBooking: true }, { where: { id: infoBooking.scheduleId } });
+            const date = new Date();
+            const infoMail = `<h4>Bạn đã đặt lịch khám thành công vào ngày ${date.toLocaleDateString()}</h4><br></br>Thời gian khám: ${
+                infoBooking.date
+            }<br></br>Tại: ${infoBooking.addressPatient}`;
+            mailer.sendMail(infoBooking.email, 'Auto Mail BookingCare', infoMail);
             resolve();
         } catch (e) {
             console.log(e);
@@ -316,7 +319,6 @@ export const handlePostCreateHistoryCare = (data, doctorId) => {
     return new Promise(async (resolve, reject) => {
         try {
             let scheduleInstance = '';
-            console.log(data.re, data.bookingId);
             if (data.re) {
                 await db.HistoriesCare.update({ status: 'Đã khám' }, { where: { bookingId: data.bookingId } });
             }

@@ -344,6 +344,24 @@ const appController = (function home() {
                     });
                 });
         },
+        autoMailByEmail(req, res) {
+            const id = req.currentUser;
+            const email = req.body.email;
+            handleAutoMailByEmail(id, email)
+                .then((data) => {
+                    return res.status(200).json({
+                        errCode: 0,
+                        errMessage: 'Create Hisrory Success',
+                        data,
+                    });
+                })
+                .catch((err) => {
+                    return res.status(200).json({
+                        errCode: 1,
+                        errMessage: err.errMessage,
+                    });
+                });
+        },
         getProfile(req, res) {
             return res.json(req.currentUser);
         },

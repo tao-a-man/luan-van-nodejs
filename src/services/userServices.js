@@ -203,7 +203,6 @@ export const handlePostDeleteHistoriesCare = (id, idTime) => {
                     [Op.and]: [{ id }, { status: ['Chưa khám'] }],
                 },
             });
-            console.log(check);
             if (check) {
                 await db.Schedule.update({ isBooking: 0 }, { where: { id: idTime } });
             }

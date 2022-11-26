@@ -47,6 +47,8 @@ function initWebRoutes(app) {
     router.get('/api/get-historycare-have-re-exam', auth, appController.getHistoryCareHaveReExam);
     // Api reExam of PAtient
     router.get('/api/get-historycare-by-user-id', auth, userController.getHistoryCareByUser);
+    // Auto mail by email of user
+    router.post('/api/auto-mail-by-email', auth, appController.autoMailByEmail);
 
     return app.use('/', router);
 }
